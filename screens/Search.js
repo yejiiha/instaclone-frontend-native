@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "../ThemeManager";
 
-export default function Feed() {
+export default function Search() {
   const theme = useTheme();
   return (
     <View
@@ -18,7 +18,7 @@ export default function Feed() {
           color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
         }}
       >
-        Feed
+        Search
       </Text>
     </View>
   );

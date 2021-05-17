@@ -4,6 +4,7 @@ export const darkTheme = {
     bgColor: "black",
     blueColor: "#0095f6",
     formColor: "#2c2c2c",
+    borderColor: "rgb(219, 219, 219)",
   },
 };
 
@@ -13,5 +14,6 @@ export const lightTheme = {
     bgColor: "#fafafa",
     blueColor: "#0095f6",
     formColor: "white",
+    borderColor: "rgb(219, 219, 219)",
   },
 };
