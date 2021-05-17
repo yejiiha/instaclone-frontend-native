@@ -1,4 +1,5 @@
 import React from "react";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
 import { useTheme } from "../../ThemeManager";
 
@@ -19,17 +20,22 @@ const Logo = styled.Image`
 
 export default function AuthLayout({ children }) {
   const theme = useTheme();
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
   return (
-    <Container>
-      <Logo
-        resizeMode="contain"
-        source={
-          theme.mode === "dark"
-            ? require("../../assets/logo-dark.png")
-            : require("../../assets/logo.png")
-        }
-      />
-      {children}
-    </Container>
+    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={dismissKeyboard}>
+      <Container>
+        <Logo
+          resizeMode="contain"
+          source={
+            theme.mode === "dark"
+              ? require("../../assets/logo-dark.png")
+              : require("../../assets/logo.png")
+          }
+        />
+        {children}
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
