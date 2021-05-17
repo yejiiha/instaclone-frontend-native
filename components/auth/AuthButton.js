@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 const Button = styled.TouchableOpacity`
-  padding: 13px 10px;
+  padding: 15px 10px;
   border-radius: 5px;
   background-color: ${(props) => props.theme.blueColor};
   width: 100%;

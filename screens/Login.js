@@ -1,15 +1,31 @@
-import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import React, { useRef } from "react";
+import AuthButton from "../components/auth/AuthButton";
+import AuthLayout from "../components/auth/AuthLayout";
+import { TextInput } from "../components/auth/AuthShared";
 
 export default function Login({ navigation }) {
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+
+  const onNext = (nextOne) => {
+    nextOne?.current?.focus();
+  };
   return (
-    <View>
-      <Text>Login</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("CreateAccount")}>
-        <View>
-          <Text>Go to Create Account</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <AuthLayout>
+      <TextInput
+        placeholder="UserName"
+        ref={usernameRef}
+        returnKeyType="next"
+        onSubmitEditing={() => onNext(passwordRef)}
+      />
+      <TextInput
+        placeholder="Password"
+        ref={passwordRef}
+        secureTextEntry
+        returnKeyType="done"
+        lastOne={true}
+      />
+      <AuthButton text="Log In" disabled={true} onPress={() => null} />
+    </AuthLayout>
   );
 }
