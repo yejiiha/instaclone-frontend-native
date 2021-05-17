@@ -17,7 +17,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export default function Login({ navigation }) {
+export default function Login({ route: { params } }) {
   const {
     control,
     register,
@@ -25,7 +25,12 @@ export default function Login({ navigation }) {
     setValue,
     formState: { errors },
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      username: params?.username,
+      password: params?.password,
+    },
+  });
   const usernameRef = useRef();
   const passwordRef = useRef();
   const onCompleted = (data) => {
@@ -78,6 +83,7 @@ export default function Login({ navigation }) {
             autoCapitalize="none"
             onSubmitEditing={() => onNext(passwordRef)}
             onChangeText={(text) => setValue("username", text)}
+            value={watch("username")}
           />
         )}
         name="username"
@@ -94,6 +100,7 @@ export default function Login({ navigation }) {
             returnKeyType="done"
             onSubmitEditing={handleSubmit(onValid)}
             onChangeText={(text) => setValue("password", text)}
+            value={watch("password")}
           />
         )}
         name="password"

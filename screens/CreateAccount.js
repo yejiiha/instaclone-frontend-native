@@ -1,30 +1,75 @@
 import React, { useRef, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text } from "react-native";
+import { gql, useMutation } from "@apollo/client";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShared";
 import ErrorMessage from "../components/auth/ErrorMessage";
 
-export default function CreateAccount() {
+const CREATE_ACCOUNT_MUTATION = gql`
+  mutation createAccount(
+    $firstName: String!
+    $lastName: String
+    $username: String!
+    $email: String!
+    $password: String!
+  ) {
+    createAccount(
+      firstName: $firstName
+      lastName: $lastName
+      username: $username
+      email: $email
+      password: $password
+    ) {
+      ok
+      error
+    }
+  }
+`;
+
+export default function CreateAccount({ navigation }) {
   const {
     control,
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-    formState,
+    getValues,
+    watch,
   } = useForm();
   const lastNameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const onCompleted = (data) => {
+    const {
+      createAccount: { ok },
+    } = data;
+    const { username, password } = getValues();
+
+    if (ok) {
+      navigation.navigate("Login", {
+        username,
+        password,
+      });
+    }
+  };
+  const [createAccountMutation, { loading }] = useMutation(
+    CREATE_ACCOUNT_MUTATION,
+    { onCompleted }
+  );
 
   const onNext = (nextOne) => {
     nextOne?.current?.focus();
   };
   const onValid = (data) => {
-    console.log(data);
+    if (!loading) {
+      createAccountMutation({
+        variables: {
+          ...data,
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -117,7 +162,13 @@ export default function CreateAccount() {
 
       <AuthButton
         text="Create Account"
-        disabled={formState.isValid}
+        disabled={
+          !watch("firstName") ||
+          !watch("lastName") ||
+          !watch("email") ||
+          !watch("username") ||
+          !watch("password")
+        }
         onPress={handleSubmit(onValid)}
       />
     </AuthLayout>
