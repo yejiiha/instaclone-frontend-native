@@ -31,7 +31,7 @@ const ManageThemeProvider = ({ children }) => {
       >
         <>
           <StatusBar
-            barStyle={themeState === "dark" ? "dark-content" : "light-content"}
+            barStyle={themeState === "dark" ? "light-content" : "dark-content"}
           />
           {children}
         </>

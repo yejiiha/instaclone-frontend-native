@@ -1,7 +1,7 @@
 export const darkTheme = {
   theme: {
     textColor: "white",
-    bgColor: "#272121",
+    bgColor: "black",
     blueColor: "#0095f6",
   },
 };
