@@ -1,16 +1,21 @@
 import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
-import styled from "styled-components";
+import { Text, View, TouchableOpacity, Switch } from "react-native";
+import styled from "styled-components/native";
+import { useTheme } from "../ThemeManager";
 
 const Container = styled.View`
-  background-color: ${(props) => props.theme.colors.bgColor};
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => props.theme.bgColor};
 `;
 
 const MainText = styled.Text`
-  color: ${(props) => props.theme.colors.textColor};
+  color: ${(props) => props.theme.textColor};
 `;
 
 export default function Welcome({ navigation }) {
+  const theme = useTheme();
   return (
     <Container>
       <MainText>Welcome</MainText>
@@ -24,6 +29,10 @@ export default function Welcome({ navigation }) {
           <MainText>Go to Login</MainText>
         </View>
       </TouchableOpacity>
+      <Switch
+        value={theme.mode === "dark"}
+        onValueChange={(value) => theme.setMode(value ? "dark" : "light")}
+      />
     </Container>
   );
 }
