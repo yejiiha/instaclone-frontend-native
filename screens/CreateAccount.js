@@ -1,11 +1,20 @@
 import React, { useRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { Text } from "react-native";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShared";
+import ErrorMessage from "../components/auth/ErrorMessage";
 
 export default function CreateAccount() {
-  const { register, handleSubmit, setValue } = useForm();
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    formState,
+  } = useForm();
   const lastNameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();
@@ -19,21 +28,37 @@ export default function CreateAccount() {
   };
 
   useEffect(() => {
-    register("firstName");
+    register("firstName", {
+      required: "First Name is required.",
+    });
     register("lastName");
-    register("username");
-    register("email");
-    register("password");
+    register("username", {
+      required: "Username is required.",
+      minLength: {
+        value: 5,
+        message: "Username should be longer than 5 chars.",
+      },
+    });
+    register("email", { required: "Email is required." });
+    register("password", { required: "Password is required." });
   }, [register]);
 
   return (
     <AuthLayout>
-      <TextInput
-        placeholder="First Name"
-        returnKeyType="next"
-        onSubmitEditing={() => onNext(lastNameRef)}
-        onChangeText={(text) => setValue("firstName", text)}
+      <Controller
+        control={control}
+        render={() => (
+          <TextInput
+            placeholder="First Name"
+            returnKeyType="next"
+            onSubmitEditing={() => onNext(lastNameRef)}
+            onChangeText={(text) => setValue("firstName", text)}
+          />
+        )}
+        name="firstName"
       />
+      <ErrorMessage message={errors?.firstName?.message} />
+
       <TextInput
         placeholder="Last Name"
         ref={lastNameRef}
@@ -41,35 +66,58 @@ export default function CreateAccount() {
         onSubmitEditing={() => onNext(usernameRef)}
         onChangeText={(text) => setValue("lastName", text)}
       />
-      <TextInput
-        placeholder="UserName"
-        ref={usernameRef}
-        autoCapitalize="none"
-        returnKeyType="next"
-        onSubmitEditing={() => onNext(emailRef)}
-        onChangeText={(text) => setValue("username", text)}
+
+      <Controller
+        control={control}
+        render={() => (
+          <TextInput
+            placeholder="UserName"
+            ref={usernameRef}
+            autoCapitalize="none"
+            returnKeyType="next"
+            onSubmitEditing={() => onNext(emailRef)}
+            onChangeText={(text) => setValue("username", text)}
+          />
+        )}
+        name="username"
       />
-      <TextInput
-        placeholder="Email"
-        ref={emailRef}
-        keyboardType="email-address"
-        returnKeyType="next"
-        onSubmitEditing={() => onNext(passwordRef)}
-        onChangeText={(text) => setValue("email", text)}
+      <ErrorMessage message={errors?.username?.message} />
+
+      <Controller
+        control={control}
+        render={() => (
+          <TextInput
+            placeholder="Email"
+            ref={emailRef}
+            keyboardType="email-address"
+            returnKeyType="next"
+            onSubmitEditing={() => onNext(passwordRef)}
+            onChangeText={(text) => setValue("email", text)}
+          />
+        )}
+        name="email"
       />
-      <TextInput
-        placeholder="Password"
-        ref={passwordRef}
-        secureTextEntry
-        returnKeyType="done"
-        onSubmitEditing={handleSubmit(onValid)}
-        lastOne={true}
-        onChangeText={(text) => setValue("password", text)}
+      <ErrorMessage message={errors?.email?.message} />
+
+      <Controller
+        control={control}
+        render={() => (
+          <TextInput
+            placeholder="Password"
+            ref={passwordRef}
+            secureTextEntry
+            returnKeyType="done"
+            onSubmitEditing={handleSubmit(onValid)}
+            onChangeText={(text) => setValue("password", text)}
+          />
+        )}
+        name="password"
       />
+      <ErrorMessage message={errors?.password?.message} />
 
       <AuthButton
         text="Create Account"
-        disabled={true}
+        disabled={formState.isValid}
         onPress={handleSubmit(onValid)}
       />
     </AuthLayout>
