@@ -1,5 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Image } from "react-native";
 import Profile from "../screens/Profile";
 import Photo from "../screens/Photo";
 import Feed from "../screens/Feed";
@@ -7,7 +8,8 @@ import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import MyProfile from "../screens/MyProfile";
 import { useTheme } from "../ThemeManager";
-import { Image } from "react-native";
+import Likes from "../screens/Likes";
+import Comments from "../screens/Comments";
 
 const Stack = createStackNavigator();
 
@@ -62,6 +64,8 @@ export default function StackNavFactory({ screenName }) {
       ) : null}
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Photo" component={Photo} />
+      <Stack.Screen name="Likes" component={Likes} />
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 }
