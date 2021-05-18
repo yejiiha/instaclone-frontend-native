@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { logUserOut } from "../apollo";
 import { useTheme } from "../ThemeManager";
 
 export default function MyProfile() {
@@ -13,13 +14,15 @@ export default function MyProfile() {
         justifyContent: "center",
       }}
     >
-      <Text
-        style={{
-          color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
-        }}
-      >
-        My Profile
-      </Text>
+      <TouchableOpacity onPress={() => logUserOut()}>
+        <Text
+          style={{
+            color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
+          }}
+        >
+          Log out
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
