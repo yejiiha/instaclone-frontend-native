@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useTheme } from "../ThemeManager";
 
-export default function Search() {
+export default function Search({ navigation }) {
   const theme = useTheme();
   return (
     <View
@@ -13,13 +13,15 @@ export default function Search() {
         justifyContent: "center",
       }}
     >
-      <Text
-        style={{
-          color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
-        }}
-      >
-        Search
-      </Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Photo")}>
+        <Text
+          style={{
+            color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
+          }}
+        >
+          Photo
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

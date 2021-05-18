@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "../ThemeManager";
 
-export default function Profile() {
+export default function MyProfile() {
   const theme = useTheme();
   return (
     <View
@@ -18,7 +18,7 @@ export default function Profile() {
           color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
         }}
       >
-        Someone's Profile
+        My Profile
       </Text>
     </View>
   );
