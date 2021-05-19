@@ -23,6 +23,16 @@ export const COMMENT_FRAGMENT = gql`
   }
 `;
 
+export const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    id
+    username
+    avatar
+    isFollowing
+    isMe
+  }
+`;
+
 export const FEED_FRAGMENT = gql`
   fragment FeedFragment on Photo {
     ...PhotoFragment

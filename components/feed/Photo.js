@@ -59,15 +59,7 @@ const ExtraContainer = styled.View`
   padding: 10px;
 `;
 
-export default function Photo({
-  id,
-  user,
-  file,
-  isLiked,
-  likes,
-  caption,
-  commentNumber,
-}) {
+export default function Photo({ id, user, file, isLiked, likes, caption }) {
   const theme = useTheme();
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
@@ -120,10 +112,16 @@ export default function Photo({
     },
     update: updateToggleLike,
   });
+  const goToProfile = () => {
+    navigation.navigate("Profile", {
+      id: user.id,
+      username: user.username,
+    });
+  };
 
   return (
     <Container>
-      <Header onPress={() => navigation.navigate("Profile")} activeOpacity={1}>
+      <Header onPress={goToProfile} activeOpacity={1}>
         <UserAvatar resizeMode="cover" source={{ uri: user.avatar }} />
         <Username>{user.username}</Username>
       </Header>
@@ -156,17 +154,20 @@ export default function Photo({
           </Action>
         </Actions>
         {likes > 0 ? (
-          <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Likes", {
+                photoId: id,
+              })
+            }
+          >
             <Likes>
               {likes === 1 ? "1 like" : likes === 0 ? null : `${likes} likes`}
             </Likes>
           </TouchableOpacity>
         ) : null}
         <Caption>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Profile")}
-            activeOpacity={1}
-          >
+          <TouchableOpacity onPress={goToProfile} activeOpacity={1}>
             <Username>{user.username}</Username>
           </TouchableOpacity>
           <CaptionText>
