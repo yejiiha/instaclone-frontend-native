@@ -1,14 +1,16 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { useTheme } from "../ThemeManager";
 import TabIcon from "../components/nav/TabIcon";
 import StackNavFactory from "./StackNavFactory";
+import useUser from "../hooks/useUser";
 
 const Tabs = createBottomTabNavigator();
 
 export default function LoggedInNav() {
   const theme = useTheme();
+  const { data } = useUser();
   return (
     <Tabs.Navigator
       tabBarOptions={{
@@ -72,9 +74,25 @@ export default function LoggedInNav() {
       <Tabs.Screen
         name="MyProfile"
         options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <TabIcon iconName={"person"} color={color} focused={focused} />
-          ),
+          tabBarIcon: ({ focused, color, size }) =>
+            data?.me?.avatar ? (
+              <Image
+                source={{ uri: data?.me?.avatar }}
+                style={{
+                  height: 24,
+                  width: 24,
+                  borderRadius: 25,
+                  ...(focused && {
+                    borderColor: `${
+                      theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+                    }`,
+                    borderWidth: 2,
+                  }),
+                }}
+              />
+            ) : (
+              <TabIcon iconName={"person"} color={color} focused={focused} />
+            ),
         }}
       >
         {() => <StackNavFactory screenName="MyProfile" />}
