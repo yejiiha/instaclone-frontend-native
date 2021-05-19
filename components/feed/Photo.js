@@ -5,6 +5,16 @@ import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../ThemeManager";
+import { gql, useMutation } from "@apollo/client";
+
+export const TOGGLE_LIKE_MUTATION = gql`
+  mutation toggleLike($id: Int!) {
+    toggleLike(id: $id) {
+      ok
+      error
+    }
+  }
+`;
 
 const Container = styled.View``;
 const Header = styled.TouchableOpacity`
@@ -80,6 +90,36 @@ export default function Photo({
           <React.Fragment key={index}>{word} </React.Fragment>
         )
       );
+  const updateToggleLike = (cache, result) => {
+    const {
+      data: {
+        toggleLike: { ok },
+      },
+    } = result;
+    if (ok) {
+      const fragmentId = `Photo:${id}`;
+      cache.modify({
+        id: fragmentId,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          },
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            }
+            return prev + 1;
+          },
+        },
+      });
+    }
+  };
+  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
+    variables: {
+      id,
+    },
+    update: updateToggleLike,
+  });
 
   return (
     <Container>
@@ -94,7 +134,7 @@ export default function Photo({
       />
       <ExtraContainer>
         <Actions>
-          <Action>
+          <Action onPress={toggleLikeMutation}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               size={24}
