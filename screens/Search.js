@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
-  TouchableOpacity,
   ActivityIndicator,
   useWindowDimensions,
   FlatList,
@@ -40,6 +39,9 @@ const Input = styled.TextInput`
   padding: 7px 10px;
   border-radius: 5px;
 `;
+const SearchedImageContainer = styled.TouchableOpacity`
+  border: 1px solid ${(props) => props.theme.bgColor};
+`;
 
 export default function Search({ navigation }) {
   const numColumns = 3;
@@ -67,12 +69,18 @@ export default function Search({ navigation }) {
   );
 
   const renderItem = ({ item: photo }) => (
-    <TouchableOpacity>
+    <SearchedImageContainer
+      onPress={() =>
+        navigation.navigate("PhotoScreen", {
+          photoId: photo.id,
+        })
+      }
+    >
       <Image
         source={{ uri: photo.file }}
         style={{ width: width / numColumns, height: width / numColumns }}
       />
-    </TouchableOpacity>
+    </SearchedImageContainer>
   );
 
   useEffect(() => {

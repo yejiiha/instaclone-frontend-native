@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Image } from "react-native";
 import Profile from "../screens/Profile";
-import Photo from "../screens/Photo";
+import PhotoScreen from "../screens/PhotoScreen";
 import Feed from "../screens/Feed";
 import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
@@ -63,7 +63,11 @@ export default function StackNavFactory({ screenName }) {
         <Stack.Screen name="MyProfile" component={MyProfile} />
       ) : null}
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Photo" component={Photo} />
+      <Stack.Screen
+        options={{ title: "Post" }}
+        name="PhotoScreen"
+        component={PhotoScreen}
+      />
       <Stack.Screen name="Likes" component={Likes} />
       <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>

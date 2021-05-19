@@ -59,12 +59,21 @@ const ExtraContainer = styled.View`
   padding: 10px;
 `;
 
-export default function Photo({ id, user, file, isLiked, likes, caption }) {
+export default function Photo({
+  id,
+  user,
+  file,
+  isLiked,
+  likes,
+  caption,
+  fullView,
+}) {
   const theme = useTheme();
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 400);
   const [showMore, setShowMore] = useState(false);
+
   useEffect(() => {
     Image.getSize(file, (width, height) => {
       setImageHeight(height / 3);
@@ -172,7 +181,7 @@ export default function Photo({ id, user, file, isLiked, likes, caption }) {
           </TouchableOpacity>
           <CaptionText>
             {!showMore && caption?.length > 50
-              ? refinedCaption.slice(0, 11)
+              ? refinedCaption?.slice(0, 11)
               : refinedCaption}
             {!showMore && caption?.length > 50 ? (
               <More onPress={() => setShowMore(!showMore)}>... more</More>
@@ -196,5 +205,5 @@ Photo.propTypes = {
   file: PropTypes.string.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likes: PropTypes.number.isRequired,
-  commentNumber: PropTypes.number.isRequired,
+  commentNumber: PropTypes.number,
 };
