@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { logUserOut } from "../apollo";
+import useUser from "../hooks/useUser";
 import { useTheme } from "../ThemeManager";
 
-export default function MyProfile() {
+export default function MyProfile({ navigation }) {
   const theme = useTheme();
+  const { data } = useUser();
+  useEffect(() => {
+    navigation.setOptions({
+      title: data?.me?.username,
+    });
+  }, []);
   return (
     <View
       style={{

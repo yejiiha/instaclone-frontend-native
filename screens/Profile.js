@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "../ThemeManager";
 
-export default function Profile() {
+export default function Profile({ navigation, route }) {
   const theme = useTheme();
+  useEffect(() => {
+    if (route?.params?.username) {
+      navigation.setOptions({
+        title: route.params.username,
+      });
+    }
+  }, []);
   return (
     <View
       style={{
