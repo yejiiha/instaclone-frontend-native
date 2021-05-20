@@ -25,11 +25,7 @@ export default function StackNavFactory({ screenName }) {
         }`,
 
         headerStyle: {
-          shadowColor: `${
-            theme.mode === "dark"
-              ? "rgba(255,255,255,0.3)"
-              : "rgb(219, 219, 219)"
-          }`,
+          shadowOpacity: 0.3,
           backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
         },
       }}
