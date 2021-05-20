@@ -5,6 +5,7 @@ import SelectPhoto from "../screens/SelectPhoto";
 import TakePhoto from "../screens/TakePhoto";
 import { useTheme } from "../ThemeManager";
 import { createStackNavigator } from "@react-navigation/stack";
+import { darkTheme, lightTheme } from "../theme";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -16,13 +17,19 @@ export default function UploadNav() {
       tabBarPosition="bottom"
       tabBarOptions={{
         style: {
-          backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+          backgroundColor: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.bgColor
+              : lightTheme.theme.bgColor
+          }`,
         },
         activeTintColor: `${
-          theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+          theme.mode === "dark"
+            ? darkTheme.theme.textColor
+            : lightTheme.theme.textColor
         }`,
         indicatorStyle: {
-          backgroundColor: "#0095f6",
+          backgroundColor: darkTheme.theme.blueColor,
           top: 0,
         },
       }}
@@ -32,7 +39,9 @@ export default function UploadNav() {
           <Stack.Navigator
             screenOptions={{
               headerTintColor: `${
-                theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+                theme.mode === "dark"
+                  ? darkTheme.theme.textColor
+                  : lightTheme.theme.textColor
               }`,
               headerBackTitleVisible: false,
               headerBackImage: ({ tintColor }) => (
@@ -40,7 +49,9 @@ export default function UploadNav() {
               ),
               headerStyle: {
                 backgroundColor: `${
-                  theme.mode === "dark" ? "black" : "#fafafa"
+                  theme.mode === "dark"
+                    ? darkTheme.theme.bgColor
+                    : lightTheme.theme.bgColor
                 }`,
                 shadowOpacity: 0.3,
               },
@@ -48,7 +59,9 @@ export default function UploadNav() {
           >
             <Stack.Screen
               name="Select"
-              options={{ title: "Select a photo" }}
+              options={{
+                title: "New Post",
+              }}
               component={SelectPhoto}
             />
           </Stack.Navigator>
