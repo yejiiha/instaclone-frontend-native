@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ImageBackground, TouchableOpacity } from "react-native";
+import { ImageBackground, StatusBar, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Camera } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import * as MediaLibrary from "expo-media-library";
+import { useIsFocused } from "@react-navigation/core";
 import DiscardModal from "../components/upload/DiscardModal";
 
 const Container = styled.View`
@@ -93,6 +94,7 @@ export default function TakePhoto({ navigation }) {
   const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
   const [takenPhoto, setTakenPhoto] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const isFocused = useIsFocused();
   const getPermissions = async () => {
     const { granted } = await Camera.requestPermissionsAsync();
     setOk(granted);
@@ -147,6 +149,7 @@ export default function TakePhoto({ navigation }) {
 
   return (
     <Container>
+      {isFocused ? <StatusBar hidden={true} /> : null}
       {takenPhoto === "" ? (
         <Camera
           type={cameraType}
@@ -229,6 +232,11 @@ export default function TakePhoto({ navigation }) {
                 </DownloadContainer>
                 <UploadContainer>
                   <Ionicons
+                    onPress={() =>
+                      navigation.navigate("UploadPhoto", {
+                        file: takenPhoto,
+                      })
+                    }
                     name="arrow-forward-outline"
                     color="black"
                     size={30}

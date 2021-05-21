@@ -64,7 +64,13 @@ export default function SelectPhoto({ navigation }) {
   };
 
   const HeaderRight = () => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("UploadPhoto", {
+          file: selectedPhoto,
+        })
+      }
+    >
       <HeaderRightText>Next</HeaderRightText>
     </TouchableOpacity>
   );
@@ -77,7 +83,7 @@ export default function SelectPhoto({ navigation }) {
     navigation.setOptions({
       headerRight: HeaderRight,
     });
-  }, []);
+  }, [selectedPhoto]);
 
   const selectPhoto = (uri) => {
     setSelectedPhoto(uri);
