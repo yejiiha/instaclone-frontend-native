@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../ThemeManager";
 import { gql, useMutation } from "@apollo/client";
+import { darkTheme, lightTheme } from "../../theme";
 
 export const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -149,8 +150,8 @@ export default function Photo({
                 isLiked
                   ? "tomato"
                   : theme.mode === "dark"
-                  ? "white"
-                  : "rgb(38, 38, 38)"
+                  ? darkTheme.theme.textColor
+                  : lightTheme.theme.textColor
               }
             />
           </Action>
@@ -158,7 +159,11 @@ export default function Photo({
             <Ionicons
               name="chatbubble-outline"
               size={24}
-              color={theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}
+              color={
+                theme.mode === "dark"
+                  ? darkTheme.theme.textColor
+                  : lightTheme.theme.textColor
+              }
             />
           </Action>
         </Actions>

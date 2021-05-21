@@ -5,6 +5,7 @@ import { useTheme } from "../ThemeManager";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../components/Fragment";
 import Photo from "../components/feed/Photo";
 import ScreenLayout from "../components/ScreenLayout";
+import { darkTheme, lightTheme } from "../theme";
 
 const SEE_PHOTO_QUERY = gql`
   query seePhoto($id: Int!) {
@@ -46,10 +47,18 @@ export default function PhotoScreen({ route }) {
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
         style={{
-          backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+          backgroundColor: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.bgColor
+              : lightTheme.theme.bgColor
+          }`,
         }}
         contentContainerStyle={{
-          backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+          backgroundColor: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.bgColor
+              : lightTheme.theme.bgColor
+          }`,
           alignItems: "center",
           justifyContent: "center",
         }}

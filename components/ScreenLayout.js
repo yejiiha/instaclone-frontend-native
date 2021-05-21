@@ -1,5 +1,6 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
+import { darkTheme, lightTheme } from "../theme";
 import { useTheme } from "../ThemeManager";
 
 export default function ScreenLayout({ loading, children }) {
@@ -7,7 +8,11 @@ export default function ScreenLayout({ loading, children }) {
   return (
     <View
       style={{
-        backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+        backgroundColor: `${
+          theme.mode === "dark"
+            ? darkTheme.theme.bgColor
+            : lightTheme.theme.bgColor
+        }`,
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -15,7 +20,11 @@ export default function ScreenLayout({ loading, children }) {
     >
       {loading ? (
         <ActivityIndicator
-          color={theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}
+          color={
+            theme.mode === "dark"
+              ? darkTheme.theme.textColor
+              : lightTheme.theme.textColor
+          }
         />
       ) : (
         children

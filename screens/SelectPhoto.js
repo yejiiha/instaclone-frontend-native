@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import * as MediaLibrary from "expo-media-library";
-import { FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 import { darkTheme } from "../theme";
@@ -127,11 +127,3 @@ export default function SelectPhoto({ navigation }) {
     </Container>
   );
 }
-const styles = StyleSheet.create({
-  enabled: {
-    opacity: 1,
-  },
-  disabled: {
-    opacity: 0.3,
-  },
-});

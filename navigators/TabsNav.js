@@ -5,6 +5,7 @@ import { useTheme } from "../ThemeManager";
 import TabIcon from "../components/nav/TabIcon";
 import StackNavFactory from "./StackNavFactory";
 import useUser from "../hooks/useUser";
+import { darkTheme, lightTheme } from "../theme";
 
 const Tabs = createBottomTabNavigator();
 
@@ -15,7 +16,9 @@ export default function TabsNav() {
     <Tabs.Navigator
       tabBarOptions={{
         activeTintColor: `${
-          theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+          theme.mode === "dark"
+            ? darkTheme.theme.textColor
+            : lightTheme.theme.textColor
         }`,
         showLabel: false,
         style: {
@@ -24,7 +27,11 @@ export default function TabsNav() {
               ? "rgba(255,255,255,0.3)"
               : "rgb(219, 219, 219)"
           }`,
-          backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+          backgroundColor: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.bgColor
+              : lightTheme.theme.bgColor
+          }`,
         },
       }}
     >

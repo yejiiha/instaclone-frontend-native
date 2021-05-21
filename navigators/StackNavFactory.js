@@ -10,6 +10,7 @@ import MyProfile from "../screens/MyProfile";
 import { useTheme } from "../ThemeManager";
 import Likes from "../screens/Likes";
 import Comments from "../screens/Comments";
+import { darkTheme, lightTheme } from "../theme";
 
 const Stack = createStackNavigator();
 
@@ -21,12 +22,18 @@ export default function StackNavFactory({ screenName }) {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: `${
-          theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+          theme.mode === "dark"
+            ? darkTheme.theme.textColor
+            : lightTheme.theme.textColor
         }`,
 
         headerStyle: {
           shadowOpacity: 0.3,
-          backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+          backgroundColor: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.bgColor
+              : lightTheme.theme.bgColor
+          }`,
         },
       }}
     >

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text } from "react-native";
+import { darkTheme, lightTheme } from "../theme";
 import { useTheme } from "../ThemeManager";
 
 export default function Profile({ navigation, route }) {
@@ -14,7 +15,11 @@ export default function Profile({ navigation, route }) {
   return (
     <View
       style={{
-        backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+        backgroundColor: `${
+          theme.mode === "dark"
+            ? darkTheme.theme.bgColor
+            : lightTheme.theme.bgColor
+        }`,
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -22,7 +27,11 @@ export default function Profile({ navigation, route }) {
     >
       <Text
         style={{
-          color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
+          color: `${
+            theme.mode === "dark"
+              ? darkTheme.theme.textColor
+              : lightTheme.theme.textColor
+          }`,
         }}
       >
         Someone's Profile

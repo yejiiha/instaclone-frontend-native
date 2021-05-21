@@ -4,6 +4,7 @@ import Welcome from "../screens/Welcome";
 import Login from "../screens/Login";
 import CreateAccount from "../screens/CreateAccount";
 import { useTheme } from "../ThemeManager";
+import { darkTheme, lightTheme } from "../theme";
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,9 @@ export default function LoggedOutNav() {
         headerTitleAlign: "center",
         headerBackTitleVisible: false,
         headerTintColor: `${
-          theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"
+          theme.mode === "dark"
+            ? darkTheme.theme.textColor
+            : lightTheme.theme.textColor
         }`,
       }}
     >

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { logUserOut } from "../apollo";
 import useUser from "../hooks/useUser";
+import { darkTheme, lightTheme } from "../theme";
 import { useTheme } from "../ThemeManager";
 
 export default function MyProfile({ navigation }) {
@@ -15,7 +16,11 @@ export default function MyProfile({ navigation }) {
   return (
     <View
       style={{
-        backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+        backgroundColor: `${
+          theme.mode === "dark"
+            ? darkTheme.theme.bgColor
+            : lightTheme.theme.bgColor
+        }`,
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -24,7 +29,11 @@ export default function MyProfile({ navigation }) {
       <TouchableOpacity onPress={() => logUserOut()}>
         <Text
           style={{
-            color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
+            color: `${
+              theme.mode === "dark"
+                ? darkTheme.theme.textColor
+                : lightTheme.theme.textColor
+            }`,
           }}
         >
           Log out

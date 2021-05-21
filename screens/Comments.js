@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+import { darkTheme, lightTheme } from "../theme";
 import { useTheme } from "../ThemeManager";
 
 export default function Comments({ navigation }) {
@@ -7,7 +8,11 @@ export default function Comments({ navigation }) {
   return (
     <View
       style={{
-        backgroundColor: `${theme.mode === "dark" ? "black" : "#fafafa"}`,
+        backgroundColor: `${
+          theme.mode === "dark"
+            ? darkTheme.theme.bgColor
+            : lightTheme.theme.bgColor
+        }`,
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -16,7 +21,11 @@ export default function Comments({ navigation }) {
       <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
         <Text
           style={{
-            color: `${theme.mode === "dark" ? "white" : "rgb(38, 38, 38)"}`,
+            color: `${
+              theme.mode === "dark"
+                ? darkTheme.theme.textColor
+                : lightTheme.theme.textColor
+            }`,
           }}
         >
           Comments
