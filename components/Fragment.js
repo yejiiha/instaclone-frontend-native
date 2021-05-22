@@ -37,6 +37,7 @@ export const FEED_FRAGMENT = gql`
   fragment FeedFragment on Photo {
     ...PhotoFragment
     user {
+      id
       username
       avatar
     }
