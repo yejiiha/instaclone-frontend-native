@@ -5,6 +5,7 @@ import UploadNav from "./UploadNav";
 import UploadPhoto from "../screens/UploadPhoto";
 import { useTheme } from "../ThemeManager";
 import { darkTheme, lightTheme } from "../theme";
+import DMNav from "./DMNav";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ export default function LoggedInNav() {
           },
         }}
         component={UploadPhoto}
+      />
+      <Stack.Screen
+        name="DM"
+        component={DMNav}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

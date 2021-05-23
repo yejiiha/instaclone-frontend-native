@@ -28,7 +28,7 @@ export const logUserOut = async () => {
 };
 
 const uploadHttpLink = createUploadLink({
-  uri: "https://witty-parrot-0.loca.lt/graphql",
+  uri: "https://jistaclone-backend.herokuapp.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
