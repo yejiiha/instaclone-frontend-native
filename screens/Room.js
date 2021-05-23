@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
-import { FlatList, KeyboardAvoidingView } from "react-native";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { FlatList, KeyboardAvoidingView, View } from "react-native";
+import { useQuery, useMutation } from "@apollo/client";
+import { useForm } from "react-hook-form";
+import { gql } from "@apollo/client";
 import ScreenLayout from "../components/ScreenLayout";
 import styled from "styled-components/native";
 import { darkTheme } from "../theme";
-import { SEE_ROOM_QUERY } from "../components/dm/DMQueries";
+import {
+  SEE_ROOM_QUERY,
+  SEND_MESSAGE_MUTATION,
+} from "../components/dm/DMQueries";
+import useUser from "../hooks/useUser";
 
 const MessageContiner = styled.View`
-  padding: 0 20px;
+  padding: ${(props) => (props.outGoing ? "0 10px" : "0 15px")};
   flex-direction: ${(props) => (props.outGoing ? "row-reverse" : "row")};
   align-items: flex-end;
 `;
@@ -21,17 +27,16 @@ const Avatar = styled.Image`
 `;
 
 const Message = styled.Text`
-  color: ${(props) =>
-    props.outGoing ? "rgb(38, 38, 38)" : `${props.theme.textColor}`};
+  color: ${(props) => props.theme.textColor};
   background-color: ${(props) =>
-    props.outGoing ? `${props.theme.mediumGray}` : "null"};
+    props.outGoing ? `${props.theme.messageBubble}` : "null"};
   border: ${(props) =>
     !props.outGoing ? `1px solid ${props.theme.borderColor}` : "none"};
   padding: 10px 15px;
   overflow: hidden;
   border-radius: 20px;
   font-size: 16px;
-  margin: 0 10px;
+  margin: ${(props) => (props.outGoing ? 0 : `0 10px`)};
 `;
 
 const TextInput = styled.TextInput`
@@ -44,11 +49,80 @@ const TextInput = styled.TextInput`
 `;
 
 export default function Room({ route, navigation }) {
+  const { data: userData } = useUser();
+  const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const { data, loading } = useQuery(SEE_ROOM_QUERY, {
     variables: {
       id: route?.params?.id,
     },
   });
+
+  const updateSendMessage = (cache, result) => {
+    const {
+      data: {
+        sendMessage: { ok, id },
+      },
+    } = result;
+
+    if (ok && userData) {
+      const { message } = getValues();
+      setValue("message", "");
+      const messageObj = {
+        __typename: "Message",
+        id,
+        payload: message,
+        user: {
+          username: userData.me.username,
+          avatar: userData.me.avatar,
+        },
+        read: true,
+      };
+      const messageFragment = cache.writeFragment({
+        data: messageObj,
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            payload
+            user {
+              username
+              avatar
+            }
+            read
+          }
+        `,
+      });
+      cache.modify({
+        id: `Room:${route.params.id}`,
+        fields: {
+          messages(prev) {
+            return [...prev, messageFragment];
+          },
+        },
+      });
+    }
+  };
+
+  const [sendMessageMutation, { loading: sendingMessage }] = useMutation(
+    SEND_MESSAGE_MUTATION,
+    {
+      update: updateSendMessage,
+    }
+  );
+
+  const onValid = ({ message }) => {
+    if (!sendingMessage) {
+      sendMessageMutation({
+        variables: {
+          payload: message,
+          roomId: route?.params?.id,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    register("message", { required: true });
+  }, [register]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -61,10 +135,15 @@ export default function Room({ route, navigation }) {
       outGoing={message.user.username !== route?.params?.talkingTo?.username}
     >
       <Author>
-        <Avatar
-          source={{ uri: message.user.avatar }}
-          style={{ borderColor: darkTheme.theme.borderColor, borderWidth: 0.5 }}
-        />
+        {message.user.username === route?.params?.talkingTo?.username && (
+          <Avatar
+            source={{ uri: message.user.avatar }}
+            style={{
+              borderColor: darkTheme.theme.borderColor,
+              borderWidth: 0.5,
+            }}
+          />
+        )}
       </Author>
       <Message
         outGoing={message.user.username !== route?.params?.talkingTo?.username}
@@ -73,6 +152,9 @@ export default function Room({ route, navigation }) {
       </Message>
     </MessageContiner>
   );
+
+  const messagesArray = [...(data?.seeRoom?.messages ?? [])];
+  messagesArray.reverse();
 
   return (
     <KeyboardAvoidingView
@@ -83,15 +165,20 @@ export default function Room({ route, navigation }) {
       <ScreenLayout loading={loading}>
         <FlatList
           inverted
-          style={{ width: "100%" }}
-          data={data?.seeRoom?.messages}
+          style={{ width: "100%", marginVertical: 10 }}
+          ItemSeparatorComponent={() => <View style={{ height: 8 }}></View>}
+          data={messagesArray}
           keyExtractor={(message) => "" + message.id}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
         <TextInput
           placeholder="Write a message..."
           returnKeyLabel="Send Message"
           returnKeyType="send"
+          onChangeText={(text) => setValue("message", text)}
+          onSubmitEditing={handleSubmit(onValid)}
+          value={watch("message")}
         />
       </ScreenLayout>
     </KeyboardAvoidingView>

@@ -8,6 +8,7 @@ export const darkTheme = {
     darkGray: "#8e8e8e",
     lightGray: "#EFEFEF",
     mediumGray: "#e3e3e3",
+    messageBubble: "#2c2c2c",
   },
 };
 
@@ -21,5 +22,6 @@ export const lightTheme = {
     darkGray: "#8e8e8e",
     lightGray: "#EFEFEF",
     mediumGray: "#e3e3e3",
+    messageBubble: "#e3e3e3",
   },
 };
