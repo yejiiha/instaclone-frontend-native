@@ -4,13 +4,11 @@ import Rooms from "../screens/Rooms";
 import Room from "../screens/Room";
 import { useTheme } from "../ThemeManager";
 import { darkTheme, lightTheme } from "../theme";
-import useUser from "../hooks/useUser";
 
 const Stack = createStackNavigator();
 
 export default function DMNav() {
   const theme = useTheme();
-  const { data: userData } = useUser();
 
   return (
     <Stack.Navigator
@@ -31,11 +29,7 @@ export default function DMNav() {
         },
       }}
     >
-      <Stack.Screen
-        name="Rooms"
-        component={Rooms}
-        options={{ headerTitle: userData?.me?.username }}
-      />
+      <Stack.Screen name="Rooms" component={Rooms} />
       <Stack.Screen name="Room" component={Room} />
     </Stack.Navigator>
   );

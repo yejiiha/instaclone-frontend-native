@@ -4,9 +4,10 @@ export const darkTheme = {
     bgColor: "black",
     blueColor: "#0095f6",
     formColor: "#2c2c2c",
-    borderColor: "rgb(219, 219, 219)",
+    borderColor: "#525252",
     darkGray: "#8e8e8e",
-    border: "1px solid rgb(219, 219, 219)",
+    lightGray: "#EFEFEF",
+    mediumGray: "#e3e3e3",
   },
 };
 
@@ -18,6 +19,7 @@ export const lightTheme = {
     formColor: "white",
     borderColor: "rgb(219, 219, 219)",
     darkGray: "#8e8e8e",
-    border: "1px solid rgb(219, 219, 219)",
+    lightGray: "#EFEFEF",
+    mediumGray: "#e3e3e3",
   },
 };
