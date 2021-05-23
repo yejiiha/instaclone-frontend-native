@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { ROOM_FRAGMENT } from "../Fragment";
+import { MESSAGE_FRAGMENT, ROOM_FRAGMENT } from "../Fragment";
 
 export const SEE_ROOMS_QUERY = gql`
   query seeRooms {
@@ -19,16 +19,11 @@ export const SEE_ROOM_QUERY = gql`
         avatar
       }
       messages {
-        id
-        payload
-        user {
-          username
-          avatar
-        }
-        read
+        ...MessageFragment
       }
     }
   }
+  ${MESSAGE_FRAGMENT}
 `;
 
 export const SEND_MESSAGE_MUTATION = gql`
@@ -38,4 +33,13 @@ export const SEND_MESSAGE_MUTATION = gql`
       ok
     }
   }
+`;
+
+export const ROOM_UPDATES = gql`
+  subscription roomUpdates($id: Int!) {
+    roomUpdates(id: $id) {
+      ...MessageFragment
+    }
+  }
+  ${MESSAGE_FRAGMENT}
 `;

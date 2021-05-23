@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FlatList, KeyboardAvoidingView, View } from "react-native";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { gql } from "@apollo/client";
 import ScreenLayout from "../components/ScreenLayout";
@@ -8,6 +8,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { darkTheme } from "../theme";
 import {
+  ROOM_UPDATES,
   SEE_ROOM_QUERY,
   SEND_MESSAGE_MUTATION,
 } from "../components/dm/DMQueries";
@@ -42,8 +43,6 @@ const Message = styled.Text`
 `;
 
 const TextInput = styled.TextInput`
-  /* margin: 25px 0 10px 0;
-  width: 95%; */
   width: 90%;
   margin-right: 10px;
   border: 1px solid ${(props) => props.theme.borderColor};
@@ -65,12 +64,66 @@ const SendBtn = styled.TouchableOpacity``;
 export default function Room({ route, navigation }) {
   const theme = useTheme();
   const { data: userData } = useUser();
-  const { register, handleSubmit, setValue, getValues, watch } = useForm();
-  const { data, loading } = useQuery(SEE_ROOM_QUERY, {
+  const { register, setValue, handleSubmit, getValues, watch } = useForm();
+  const client = useApolloClient();
+
+  const { data, loading, subscribeToMore } = useQuery(SEE_ROOM_QUERY, {
     variables: {
       id: route?.params?.id,
     },
   });
+
+  const updateQuery = (prevQuery, options) => {
+    const {
+      subscriptionData: {
+        data: { roomUpdates: message },
+      },
+    } = options;
+
+    if (message.id) {
+      const incomingMessage = client.cache.writeFragment({
+        data: message,
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            payload
+            user {
+              username
+              avatar
+            }
+            read
+          }
+        `,
+      });
+
+      client.cache.modify({
+        id: `Room:${route.params.id}`,
+        fields: {
+          messages(prev) {
+            const existingMessage = prev.find(
+              (aMessage) => aMessage.__ref === incomingMessage.__ref
+            );
+            if (existingMessage) {
+              return prev;
+            }
+            return [...prev, incomingMessage];
+          },
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (data?.seeRoom) {
+      subscribeToMore({
+        document: ROOM_UPDATES,
+        variables: {
+          id: route?.params?.id,
+        },
+        updateQuery,
+      });
+    }
+  }, [data]);
 
   const updateSendMessage = (cache, result) => {
     const {
