@@ -34,6 +34,7 @@ export default function LoggedInNav() {
               : lightTheme.theme.textColor
           }`,
           headerStyle: {
+            shadowOpacity: 0.3,
             backgroundColor: `${
               theme.mode === "dark"
                 ? darkTheme.theme.bgColor
