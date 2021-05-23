@@ -5,12 +5,14 @@ import { useForm } from "react-hook-form";
 import { gql } from "@apollo/client";
 import ScreenLayout from "../components/ScreenLayout";
 import styled from "styled-components/native";
+import { Ionicons } from "@expo/vector-icons";
 import { darkTheme } from "../theme";
 import {
   SEE_ROOM_QUERY,
   SEND_MESSAGE_MUTATION,
 } from "../components/dm/DMQueries";
 import useUser from "../hooks/useUser";
+import { useTheme } from "../ThemeManager";
 
 const MessageContiner = styled.View`
   padding: ${(props) => (props.outGoing ? "0 10px" : "0 15px")};
@@ -40,15 +42,28 @@ const Message = styled.Text`
 `;
 
 const TextInput = styled.TextInput`
-  margin: 25px 0 10px 0;
-  width: 95%;
+  /* margin: 25px 0 10px 0;
+  width: 95%; */
+  width: 90%;
+  margin-right: 10px;
   border: 1px solid ${(props) => props.theme.borderColor};
   padding: 10px 20px;
   border-radius: 1000px;
   color: ${(props) => props.theme.textColor};
 `;
 
+const InputContainer = styled.View`
+  width: 95%;
+  margin-bottom: 20px;
+  margin-top: 25px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SendBtn = styled.TouchableOpacity``;
+
 export default function Room({ route, navigation }) {
+  const theme = useTheme();
   const { data: userData } = useUser();
   const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const { data, loading } = useQuery(SEE_ROOM_QUERY, {
@@ -172,14 +187,34 @@ export default function Room({ route, navigation }) {
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
         />
-        <TextInput
-          placeholder="Write a message..."
-          returnKeyLabel="Send Message"
-          returnKeyType="send"
-          onChangeText={(text) => setValue("message", text)}
-          onSubmitEditing={handleSubmit(onValid)}
-          value={watch("message")}
-        />
+        <InputContainer>
+          <TextInput
+            placeholder="Write a message..."
+            returnKeyLabel="Send Message"
+            returnKeyType="send"
+            onChangeText={(text) => setValue("message", text)}
+            onSubmitEditing={handleSubmit(onValid)}
+            value={watch("message")}
+          />
+          <SendBtn
+            onPress={handleSubmit(onValid)}
+            disabled={!Boolean(watch("message"))}
+          >
+            <Ionicons
+              name="send"
+              color={
+                !Boolean(watch("message"))
+                  ? theme.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.5)"
+                    : "rgba(0, 0, 0, 0.5)"
+                  : theme.mode === "dark"
+                  ? "white"
+                  : "rgb(38, 38,38)"
+              }
+              size={22}
+            />
+          </SendBtn>
+        </InputContainer>
       </ScreenLayout>
     </KeyboardAvoidingView>
   );
